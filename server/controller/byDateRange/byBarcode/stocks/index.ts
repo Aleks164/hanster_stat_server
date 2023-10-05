@@ -5,11 +5,9 @@ import getStocks from "./getStocks";
 const stocksByDateRange = express.Router();
 
 stocksByDateRange.get("/", async (req, res, next) => {
-    const fromDate = req.query["fromDate"] as string;
-    const toDate = req.query["toDate"] as string;
     try {
-        if (!(fromDate && toDate)) throw new Error("Wrong date");
-        const saleCount = await SupplierStocks.aggregate(getStocks(fromDate, toDate)).exec();
+        const saleCount = await SupplierStocks.aggregate(getStocks()).exec();
+        res.set('Cache-control', 'public, max-age=3000')
         res.status(200).json(saleCount);
     } catch (e) {
         res.status(400).json("Bad request");

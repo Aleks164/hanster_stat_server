@@ -5,7 +5,7 @@ export default function getReportDetailByDateRange(fromDate: string, toDate: str
     return [
         {
             '$match': {
-                'date_from': {
+                'sale_dt': {
                     '$gte': new Date(fromDate),
                     '$lte': fromDate === toDate ? getNextDayDate(toDate) : new Date(toDate)
                 }

@@ -32,9 +32,9 @@ app.get("*", (req, res) => {
   res.status(404).send("Sorry, cant find that");
 });
 
-const job = new CronJob('01 10 23 * * *', async function () {
+const job = new CronJob('01 58 23 * * *', async function () {
   console.log('Midnight1:', new Date());
-  await regularUpdateMongoDB()
+  await regularUpdateMongoDB();
   console.log('Midnight2:', new Date());
 });
 

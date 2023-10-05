@@ -2,15 +2,10 @@ import fetch from "node-fetch";
 import "dotenv/config";
 import { DetailReportItem } from "../../../commonTypes/api";
 
-async function getSupplierReportDetailByPeriod() {
-  const currentDate = new Date();
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1;
-  const day = currentDate.getDate();
-  const dateAsString = `${year}-${month}-${day}`;
+async function getSupplierReportDetailByPeriod(date: string) {
   try {
     const responseJson = await fetch(
-      `https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=2022-01-01&dateTo=${dateAsString}`,
+      `https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=2022-10-02&dateTo=${date}`,
       {
         method: "GET",
         headers: {

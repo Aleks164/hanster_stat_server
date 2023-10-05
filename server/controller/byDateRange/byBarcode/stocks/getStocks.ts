@@ -1,14 +1,14 @@
 import { PipelineStage } from "mongoose";
 import { getNextDayDate } from "../../../../utils/getNextDayDate";
 
-export default function getStockDataByDateRange(fromDate: string, toDate: string): PipelineStage[] {
+export default function getStockDataByDateRange(): PipelineStage[] {
     return [
         {
             '$match': {
                 '$and': [
                     {
                         'lastChangeDate': {
-                            '$gte': new Date('Sun, 01 Jan 2023 00:00:00 GMT')
+                            '$gte': new Date('2023-06-01')
                         }
                     }, {
                         'quantity': {
