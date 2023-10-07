@@ -11,23 +11,25 @@ async function regularUpdateMongoDB() {
         const currentDate = new Date();
         const year = currentDate.getFullYear();
         const month = currentDate.getMonth() + 1;
-        const monthAsString = month > 9 ? month : `0${month}`;
-        const day = currentDate.getDate();
-        const dayAsString = day > 9 ? day : `0${day}`;
-        const dateAsString = `${year}-${monthAsString}-${dayAsString}`;
-        const newDate = new Date(dateAsString);
-        const newDateFormatted = dayjs(newDate).format('YYYY-MM-DD');
-        console.log(newDateFormatted);
+        const monthAsString = month > 9 ? month : `0${month}`; 
+        const nextDay = currentDate.getDate() + 1;
+        const nextDayAsString = nextDay > 9 ? nextDay : `0${nextDay}`; 
+        const nextDayDateAsString = `${year}-${monthAsString}-${nextDayAsString}`; 
+        const nextDayDate = new Date(nextDayDateAsString);
+        const nextDateFormatted = dayjs(nextDayDate).format('YYYY-MM-DD');
+        const dayAtLastWeekFormatted = dayjs(currentDate).subtract(7, 'day').format('YYYY-MM-DD');
+        console.log("dayAtLastWeekFormatted",dayAtLastWeekFormatted);
+        console.log("nextDateFormatted", nextDateFormatted);
 
-        const reportDetail = await getSupplierReportDetailByPeriod(newDateFormatted);
+        const reportDetail = await getSupplierReportDetailByPeriod(nextDateFormatted, dayAtLastWeekFormatted);
         // await SupplierReportDetailByPeriod.create(reportDetail);
         await SupplierReportDetailByPeriod.insertMany(reportDetail);
-        console.log('SupplierReportDetailByPeriod done')
-        const stocks = await getSupplierStocksFromWB(newDateFormatted);
+        console.log('SupplierReportDetailByPeriod done', reportDetail)
+        const stocks = await getSupplierStocksFromWB(dayAtLastWeekFormatted);
         // await SupplierStocks.create(stocks);
         await SupplierStocks.insertMany(stocks);
         console.log('SupplierStocks done')
-        const orders = await getSupplierOrdersFromWB(newDateFormatted);
+        const orders = await getSupplierOrdersFromWB(dayAtLastWeekFormatted);
         // await SupplierOrders.create(orders);
         await SupplierOrders.insertMany(orders);
         console.log('SupplierOrders done')

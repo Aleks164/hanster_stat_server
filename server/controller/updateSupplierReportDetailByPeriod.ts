@@ -7,7 +7,7 @@ const updateSupplierReportDetailByPeriod = express.Router();
 updateSupplierReportDetailByPeriod.get("/", async (req, res, next) => {
     const date = req.query["date"] as string;
     if (!date) return next();
-    const reportDetail = await getSupplierReportDetailByPeriod(date);
+    const reportDetail = await getSupplierReportDetailByPeriod(date,date);
     try {
         const reportDetailFromWB = await SupplierReportDetailByPeriod.create(reportDetail);
         res.status(200).json(reportDetailFromWB);
