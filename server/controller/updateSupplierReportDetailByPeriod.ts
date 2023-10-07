@@ -5,8 +5,9 @@ import getSupplierReportDetailByPeriod from "../utils/fromWB/getSupplierReportDe
 const updateSupplierReportDetailByPeriod = express.Router();
 
 updateSupplierReportDetailByPeriod.get("/", async (req, res, next) => {
-
-    const reportDetail = await getSupplierReportDetailByPeriod();
+    const date = req.query["date"] as string;
+    if (!date) return next();
+    const reportDetail = await getSupplierReportDetailByPeriod(date,date);
     try {
         const reportDetailFromWB = await SupplierReportDetailByPeriod.create(reportDetail);
         res.status(200).json(reportDetailFromWB);

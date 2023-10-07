@@ -5,8 +5,9 @@ import SupplierStocks from "../model/SupplierStocks";
 const updateSupplierStocks = express.Router();
 
 updateSupplierStocks.get("/", async (req, res, next) => {
-
-    const stocksListFromWB = await getSupplierStocksFromWB();
+    const date = req.query["date"] as string;
+    if (!date) return next();
+    const stocksListFromWB = await getSupplierStocksFromWB(date);
     try {
         const stocks = await SupplierStocks.create(stocksListFromWB);
         res.status(200).json(stocks);

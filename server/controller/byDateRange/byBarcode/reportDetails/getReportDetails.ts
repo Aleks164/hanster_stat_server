@@ -5,7 +5,7 @@ export default function getReportDetailByDateRange(fromDate: string, toDate: str
     return [
         {
             '$match': {
-                'date_from': {
+                'sale_dt': {
                     '$gte': new Date(fromDate),
                     '$lte': fromDate === toDate ? getNextDayDate(toDate) : new Date(toDate)
                 }
@@ -39,6 +39,9 @@ export default function getReportDetailByDateRange(fromDate: string, toDate: str
                 },
                 'ts_name': {
                     '$first': '$ts_name' //Размер
+                },
+                'nm_id':{
+                    '$first': '$nm_id' // Артикул WB
                 }
             }
         }, {

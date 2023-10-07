@@ -19,10 +19,10 @@ app.use("/orders", ordersByDateRange);
 app.use("/stocks", stocksByDateRange);
 app.use("/reports", reportDetailsByDateRange);
 
-app.use("/supplier_stocks", updateSupplierStocks);
-app.use("/supplier_orders", updateSupplierOrders);
-app.use("/supplier_sales", updateSupplierSales);
-app.use("/supplier_reportDetailByPeriod", updateSupplierReportDetailByPeriod);
+// app.use("/supplier_stocks", updateSupplierStocks);
+// app.use("/supplier_orders", updateSupplierOrders);
+// app.use("/supplier_sales", updateSupplierSales);
+// app.use("/supplier_reportDetailByPeriod", updateSupplierReportDetailByPeriod);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -32,11 +32,12 @@ app.get("*", (req, res) => {
   res.status(404).send("Sorry, cant find that");
 });
 
-const job = new CronJob('01 10 23 * * *', async function () {
+const job = new CronJob('01 15 15 * * *', async function () {
   console.log('Midnight1:', new Date());
-  await regularUpdateMongoDB()
+  await regularUpdateMongoDB();
   console.log('Midnight2:', new Date());
 });
+ 
 
 job.start();
 
