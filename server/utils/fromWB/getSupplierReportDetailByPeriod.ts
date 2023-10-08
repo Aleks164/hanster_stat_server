@@ -1,8 +1,8 @@
 import fetch from "node-fetch";
-import "dotenv/config";
 import { DetailReportItem } from "../../../commonTypes/api";
+import "dotenv/config";
 
-async function getSupplierReportDetailByPeriod(date: string, dayAtLastWeek: string) {
+async function getSupplierReportDetailByPeriod(dayAtLastWeek: string, date: string,) {
   try {
     const responseJson = await fetch(
       `https://statistics-api.wildberries.ru/api/v1/supplier/reportDetailByPeriod?dateFrom=${dayAtLastWeek}&dateTo=${date}`,

@@ -37,7 +37,7 @@ const job = new CronJob('01 15 15 * * *', async function () {
   await regularUpdateMongoDB();
   console.log('Midnight2:', new Date());
 });
- 
+
 
 job.start();
 

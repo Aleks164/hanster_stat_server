@@ -1,6 +1,6 @@
 import express from "express";
-import SupplierSales from "../../../../model/supplierSales";
 import getOrders from "./getOrders";
+import SupplierOrders from "../../../../model/supplierOrders";
 
 const ordersByDateRange = express.Router();
 
@@ -9,7 +9,7 @@ ordersByDateRange.get("/", async (req, res, next) => {
     const toDate = req.query["toDate"] as string;
     try {
         if (!(fromDate && toDate)) throw new Error("Wrong date");
-        const saleCount = await SupplierSales.aggregate(getOrders(fromDate, toDate)).exec();
+        const saleCount = await SupplierOrders.aggregate(getOrders(fromDate, toDate)).exec();
         res.status(200).json(saleCount);
     } catch (e) {
         res.status(400).json("Bad request");
