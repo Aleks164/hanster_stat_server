@@ -1,6 +1,6 @@
 import express from "express";
 import getSupplierStocksFromWB from "../utils/fromWB/getSupplierStocksFromWB";
-import SupplierStocks from "../model/SupplierStocks";
+import SupplierStocks from "../model/supplierStocks";
 
 const updateSupplierStocks = express.Router();
 

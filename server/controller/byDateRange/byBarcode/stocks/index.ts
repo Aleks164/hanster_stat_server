@@ -1,5 +1,5 @@
 import express from "express";
-import SupplierStocks from "../../../../model/SupplierStocks";
+import SupplierStocks from "../../../../model/supplierStocks";
 import getStocks from "./getStocks";
 
 const stocksByDateRange = express.Router();

@@ -1,6 +1,6 @@
 import SupplierReportDetailByPeriod from "../model/supplierReportDetailByPeriod";
 import getSupplierReportDetailByPeriod from "../utils/fromWB/getSupplierReportDetailByPeriod";
-import SupplierStocks from "../model/SupplierStocks";
+import SupplierStocks from "../model/supplierStocks";
 import SupplierOrders from "../model/supplierOrders";
 import getSupplierOrdersFromWB from "./fromWB/getSupplierOrdersFromWB";
 import getSupplierStocksFromWB from "./fromWB/getSupplierStocksFromWB";
