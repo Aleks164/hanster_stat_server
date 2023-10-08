@@ -10,6 +10,7 @@ reportDetailsByDateRange.get("/", async (req, res, next) => {
     try {
         if (!(fromDate && toDate)) throw new Error("Wrong date");
         const saleCount = await SupplierReportDetailByPeriod.aggregate(getReportDetails(fromDate, toDate)).exec();
+        res.set('Cache-control', 'public, max-age=3000');
         res.status(200).json(saleCount);
     } catch (e) {
         res.status(400).json("Bad request");
