@@ -10,9 +10,18 @@ import reportDetailsByDateRange from "./controller/byDateRange/byBarcode/reportD
 import stocksByDateRange from "./controller/byDateRange/byBarcode/stocks";
 import { CronJob } from "cron";
 import regularUpdateMongoDB from "./utils/regularUpdateMongoDB";
+import https from 'https';
+import fs from 'fs';
+import path from "path";
 
 const app = express();
 const port = 3000;
+const key = fs.readFileSync(path.resolve(__dirname, '../selfsigned.key'));
+const cert = fs.readFileSync(path.resolve(__dirname, '../selfsigned.crt'));
+const options = {
+  key: key,
+  cert: cert
+};
 
 app.use(cors());
 app.use("/orders", ordersByDateRange);
@@ -32,18 +41,20 @@ app.get("*", (req, res) => {
   res.status(404).send("Sorry, cant find that");
 });
 
-const job = new CronJob('01 15 15 * * *', async function () {
-  console.log('Midnight1:', new Date());
-  await regularUpdateMongoDB();
-  console.log('Midnight2:', new Date());
-});
+// const job = new CronJob('01 15 15 * * *', async function () {
+//   console.log('Midnight1:', new Date());
+//   await regularUpdateMongoDB();
+//   console.log('Midnight2:', new Date());
+// });
 
 
-job.start();
+// job.start();
 
-app.listen(port, async () => {
+const server = https.createServer(options, app);
+
+server.listen(port, async () => {
   await connectToDB();
-  console.log(`Example app listening on port ${port}`);
+  console.log(`Listening on port ${port}`);
 });
 
 
