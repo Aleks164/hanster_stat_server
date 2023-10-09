@@ -15,7 +15,7 @@ import fs from 'fs';
 import path from "path";
 
 const app = express();
-const port = 3000;
+const port = 443;
 const key = fs.readFileSync(path.resolve(__dirname, '../selfsigned.key'));
 const cert = fs.readFileSync(path.resolve(__dirname, '../selfsigned.crt'));
 const options = {
