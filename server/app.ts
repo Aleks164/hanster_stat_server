@@ -16,8 +16,8 @@ import path from "path";
 
 const app = express();
 const port = 443;
-const key = fs.readFileSync(path.resolve(__dirname, '../selfsigned.key'));
-const cert = fs.readFileSync(path.resolve(__dirname, '../selfsigned.crt'));
+const key = fs.readFileSync('/etc/letsencrypt/live/hansterstatserver.ru/privkey.pem');
+const cert = fs.readFileSync('/etc/letsencrypt/live/hansterstatserver.ru/fullchain.pem');
 const options = {
   key: key,
   cert: cert
