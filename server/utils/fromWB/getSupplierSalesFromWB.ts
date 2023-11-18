@@ -2,11 +2,11 @@ import fetch from "node-fetch";
 import "dotenv/config";
 import { SalesItem } from "../../../commonTypes/api";
 
-async function getSupplierSalesFromWB() {
+async function getSupplierSalesFromWB(dateFrom: string) {
 
   try {
     const responseJson = await fetch(
-      `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=2022-01-01`,
+      `https://statistics-api.wildberries.ru/api/v1/supplier/sales?dateFrom=${dateFrom}`,
       {
         method: "GET",
         headers: {

@@ -12,18 +12,17 @@ export default function getSaleDataByDateRange(fromDate: string, toDate: string)
             }
         }, {
             '$project': {
-                'gNumber': 1,
-                'date': 1,
-                'discountPercent': 1,
-                'spp': 1,
-                'forPay': 1,
-                'finishedPrice': 1,
-                'priceWithDisc': 1,
-                'barcode': 1
+                "warehouseName": 1,
+                "nmId": 1,
+                "barcode": 1,
+                "subject": 1,
+                "techSize": 1,
+                "finishedPrice": 1,
+                "supplierArticle": 1
             }
         }, {
             '$sort': {
-                'date': 1
+                'barcode': 1
             }
         }
     ]

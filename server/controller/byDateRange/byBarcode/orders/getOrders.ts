@@ -11,15 +11,18 @@ export default function getOrdersDataByDateRange(fromDate: string, toDate: strin
                 }
             }
         }, {
-            '$group': {
-                '_id': '$barcode',
-                'ordersCount': {
-                    '$count': {}
-                }
+            '$project': {
+                "barcode": 1,
+                "warehouseName": 1,
+                "nmId": 1,
+                "subject": 1,
+                "techSize": 1,
+                "supplierArticle": 1,
+                "isCancel": 1
             }
         }, {
             '$sort': {
-                '_id': 1
+                'barcode': 1
             }
         }
     ]

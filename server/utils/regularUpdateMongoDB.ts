@@ -5,34 +5,36 @@ import SupplierOrders from "../model/supplierOrders";
 import getSupplierOrdersFromWB from "./fromWB/getSupplierOrdersFromWB";
 import getSupplierStocksFromWB from "./fromWB/getSupplierStocksFromWB";
 import dayjs from "dayjs";
+import getSupplierSalesFromWB from "./fromWB/getSupplierSalesFromWB";
+import SupplierSales from "../model/supplierSales";
 
 async function regularUpdateMongoDB() {
     try {
-        const currentDate = new Date();
-        const year = currentDate.getFullYear();
-        const month = currentDate.getMonth() + 1;
-        const monthAsString = month > 9 ? month : `0${month}`;
-        const nextDay = currentDate.getDate() + 1;
-        const nextDayAsString = nextDay > 9 ? nextDay : `0${nextDay}`;
-        const nextDayDateAsString = `${year}-${monthAsString}-${nextDayAsString}`;
-        const nextDayDate = new Date(nextDayDateAsString);
-        const nextDateFormatted = dayjs(nextDayDate).format('YYYY-MM-DD');
-        const dayAtLastWeekFormatted = dayjs(currentDate).subtract(7, 'day').format('YYYY-MM-DD');
-        console.log("dayAtLastWeekFormatted", dayAtLastWeekFormatted);
-        console.log("nextDateFormatted", nextDateFormatted);
+        //--------------get latest Sales item in DB ----------------------------------------------------------------
+        const latestSalesItem = await SupplierSales.find().sort({ lastChangeDate: -1 }).limit(1).exec();
+        const salesDateFrom = latestSalesItem?.[0];
+        console.log(salesDateFrom)
+        if (!salesDateFrom) throw new Error('Latest Sales is not found');
+        const salesNextSecondsDate = dayjs(new Date(String(salesDateFrom.lastChangeDate))).add(1, 'second').format('YYYY-MM-DDTHH:mm:ss');
+        const sales = await getSupplierSalesFromWB(salesNextSecondsDate)
+        await SupplierSales.insertMany(sales);
 
-        const reportDetail = await getSupplierReportDetailByPeriod(dayAtLastWeekFormatted, nextDateFormatted);
-        // await SupplierReportDetailByPeriod.create(reportDetail);
-        await SupplierReportDetailByPeriod.insertMany(reportDetail);
-        console.log('SupplierReportDetailByPeriod done', reportDetail)
-        const stocks = await getSupplierStocksFromWB(dayAtLastWeekFormatted);
+        //--------------get latest Orders item in DB ----------------------------------------------------------------
+        const latestStockItem = await SupplierOrders.find().sort({ lastChangeDate: -1 }).limit(1).exec();
+        const dateFrom = latestStockItem?.[0];
+        if (!dateFrom) throw new Error('Latest Orders is not found');
+        const nextSecondsDate = dayjs(new Date(String(dateFrom.lastChangeDate))).add(1, 'second').format('YYYY-MM-DDTHH:mm:ss');
+
+        //--------------get from WB Orders items after latests Order item from DB and past them to DB ----------------
+        const orders = await getSupplierOrdersFromWB(nextSecondsDate);
         // // await SupplierStocks.create(stocks);
-        await SupplierStocks.insertMany(stocks);
-        console.log('SupplierStocks done')
-        const orders = await getSupplierOrdersFromWB(dayAtLastWeekFormatted);
-        // // await SupplierOrders.create(orders);
         await SupplierOrders.insertMany(orders);
-        console.log('SupplierOrders done')
+
+        //--------------replace all stocks items in DB by WB data ---------------------------------------------------- 
+        await SupplierStocks.deleteMany({});
+        const stocks = await getSupplierStocksFromWB("2023-01-01");
+        // await SupplierOrders.create(orders);
+        await SupplierStocks.insertMany(stocks);
     } catch (e) {
         console.log("Error while saving data to MongoDB", e);
     }

@@ -1,5 +1,4 @@
 import { PipelineStage } from "mongoose";
-import { getNextDayDate } from "../../../../utils/getNextDayDate";
 
 export default function getStockDataByDateRange(): PipelineStage[] {
     return [
@@ -11,36 +10,26 @@ export default function getStockDataByDateRange(): PipelineStage[] {
                             '$gte': new Date('2023-06-01')
                         }
                     }, {
-                        'quantity': {
+                        'quantityFull': {
                             '$gt': 0
                         }
                     }
                 ]
             }
         }, {
-            '$group': {
-                '_id': '$barcode',
-                'quantityOnStock': {
-                    '$push': '$quantity'
-                },
-                'retail_price': {
-                    '$push': '$Price'
-                },
-                'sale_percent': {
-                    '$push': '$Discount'
-                },
-                'subject_name': {
-                    '$first': '$subject'
-                },
-                'sa_name': {
-                    '$first': '$supplierArticle'
-                },
-                'ts_name': {
-                    '$first': '$techSize'
-                },
-                'daysOnSite': {
-                    '$push': '$daysOnSite'
-                }
+            '$project': {
+                "techSize": 1,
+                "quantity": 1,
+                "barcode": 1,
+                "warehouseName": 1,
+                "nmId": 1,
+                "subject": 1,
+                "supplierArticle": 1,
+                "inWayFromClient": 1,
+            }
+        }, {
+            '$sort': {
+                'barcode': 1
             }
         }
     ]

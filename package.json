@@ -4,7 +4,7 @@
   "description": "Серверная часть приложения сбора/отображения статистики продаж бренда Hanster",
   "main": "./server/app.ts",
   "scripts": {
-    "start": "nodemon -q server/app.ts",
+    "start": "ts-node --esm server/app.ts",
     "lint": "prettier --check . && eslint . --ext .js,.tsx && tsc --noEmit && stylelint \"**/*.css\"",
     "lint:fix": "prettier --write . && eslint . --fix --ext .js,.tsx && stylelint \"**/*.css\" --fix",
     "tsc": "npx tsc --noEmit",
