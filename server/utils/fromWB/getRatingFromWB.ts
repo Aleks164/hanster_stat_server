@@ -2,15 +2,26 @@ import fetch from "node-fetch";
 import "dotenv/config";
 
 export interface Rating {
+
   "valuation": string,
   "feedbacksCount": number,
-  "nmId": number
+  "nmId": number,
+  "error"?: boolean
+}
+
+export interface WBRating {
+  data: {
+    "valuation": string,
+    "feedbacksCount": number,
+    "nmId": number
+  },
+  "error"?: boolean
 }
 
 async function getRatingFromWB(nmid: string) {
   try {
     const responseJson = await fetch(
-      `https://feedbacks-api.wildberries.ru/api/v1/feedbacks/products/rating/nmid?nmid=${nmid}`,
+      `https://feedbacks-api.wildberries.ru/api/v1/feedbacks/products/rating/nmid?nmId=${nmid}`,
       {
         method: "GET",
         headers: {
@@ -19,9 +30,12 @@ async function getRatingFromWB(nmid: string) {
         },
       }
     );
-    const salesListFromWB = (await responseJson.json()) as Rating;
-    salesListFromWB.nmId = +nmid;
-    return salesListFromWB;
+    const salesListFromWB = (await responseJson.json()) as WBRating;
+    const valuation = salesListFromWB?.data?.valuation;
+    const feedbacksCount = salesListFromWB?.data?.feedbacksCount;
+    if (!valuation || !feedbacksCount) return { valuation, feedbacksCount, error: true };
+    salesListFromWB.error = true;
+    return { valuation, feedbacksCount, nmId: +nmid };
   } catch (err) {
     console.log(err);
   }
